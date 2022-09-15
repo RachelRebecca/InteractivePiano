@@ -18,6 +18,7 @@ public class PianoGUI extends JFrame {
     public PianoGUI(MidiChannel midiChannel, Recorder recorder) {
         setTitle("MY PIANO");
         setSize(MainFrameInterface.KEYBOARD_WIDTH, MainFrameInterface.FRAME_HEIGHT);
+        setMinimumSize(new Dimension(740, 205));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel root = new JPanel(new BorderLayout());
@@ -42,10 +43,15 @@ public class PianoGUI extends JFrame {
                     int height = c.getHeight() - MainFrameInterface.RECORDER_PANEL_HEIGHT
                             - MainFrameInterface.INSTRUMENTS_PANEL_HEIGHT;
 
-                    int whiteWidth = (c.getWidth() / KeyStats.OCTAVES) / KeyStats.NUM_WHITE_KEYS_IN_OCTAVE - KeyStats.SPACE_BETWEEN_WHITE_KEYS;
+                    int octaveWidth = (c.getWidth() / KeyStats.OCTAVES);
+                    int spaceBetweenWhiteKeys = (int) ((double) 2/300 * octaveWidth); // percentage
+
+                    int whiteWidth = octaveWidth / KeyStats.NUM_WHITE_KEYS_IN_OCTAVE - KeyStats.SPACE_BETWEEN_WHITE_KEYS;
                     int blackWidth = (int) (13.7 * whiteWidth / 23.5); // proportion: 13.7 and 23.5 are average size of white and black keys, respectively
 
                     int blackHeight = (int) (height / 1.75);
+
+                    //int bigSpaceBetweenBlackKeys = 2 * (whiteWidth + spaceBetweenWhiteKeys) - blackWidth;
 
                     if (key.getDefaultColor() == Color.WHITE)
                     {
@@ -54,10 +60,9 @@ public class PianoGUI extends JFrame {
                     else {
                         key.setSize(new Dimension(blackWidth, blackHeight));
                     }
-
                 }
-
                 System.out.println(c.getSize());
+
                 revalidate();
             }
         });
