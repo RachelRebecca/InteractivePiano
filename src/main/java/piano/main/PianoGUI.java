@@ -15,6 +15,8 @@ import javax.swing.*;
 
 public class PianoGUI extends JFrame {
 
+    public static int MAX_KEYBOARD_WIDTH = 860;
+
     public PianoGUI(MidiChannel midiChannel, Recorder recorder) {
         setTitle("MY PIANO");
         setSize(MainFrameInterface.KEYBOARD_WIDTH, MainFrameInterface.FRAME_HEIGHT);
@@ -25,33 +27,35 @@ public class PianoGUI extends JFrame {
         root.setBackground(Color.BLACK);
 
         Keyboard keyboard = new Keyboard(midiChannel, recorder);
-
         root.add(new RecorderPanel(recorder), BorderLayout.NORTH);
         root.add(keyboard, BorderLayout.CENTER);
         root.add(new InstrumentsPanel(midiChannel), BorderLayout.SOUTH);
+
         setContentPane(root);
 
+        onResize(keyboard);
+    }
+
+    private void onResize(Keyboard keyboard)
+    {
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt)
             {
-                Component c = (Component) evt.getSource();
+                Component frame = (Component) evt.getSource();
+
+                int height = frame.getHeight() - MainFrameInterface.RECORDER_PANEL_HEIGHT
+                        - MainFrameInterface.INSTRUMENTS_PANEL_HEIGHT;
 
                 for (Component component : keyboard.getComponents())
                 {
                     PianoLabel key = (PianoLabel) component;
 
-                    int height = c.getHeight() - MainFrameInterface.RECORDER_PANEL_HEIGHT
-                            - MainFrameInterface.INSTRUMENTS_PANEL_HEIGHT;
-
-                    int octaveWidth = (c.getWidth() / KeyStats.OCTAVES);
-                    int spaceBetweenWhiteKeys = (int) ((double) 2/300 * octaveWidth); // percentage
+                    int octaveWidth = Math.min(frame.getWidth(), MAX_KEYBOARD_WIDTH) / KeyStats.OCTAVES;
 
                     int whiteWidth = octaveWidth / KeyStats.NUM_WHITE_KEYS_IN_OCTAVE - KeyStats.SPACE_BETWEEN_WHITE_KEYS;
                     int blackWidth = (int) (13.7 * whiteWidth / 23.5); // proportion: 13.7 and 23.5 are average size of white and black keys, respectively
 
                     int blackHeight = (int) (height / 1.75);
-
-                    //int bigSpaceBetweenBlackKeys = 2 * (whiteWidth + spaceBetweenWhiteKeys) - blackWidth;
 
                     if (key.getDefaultColor() == Color.WHITE)
                     {
@@ -61,10 +65,11 @@ public class PianoGUI extends JFrame {
                         key.setSize(new Dimension(blackWidth, blackHeight));
                     }
                 }
-                System.out.println(c.getSize());
+
+               keyboard.setLocation((frame.getWidth() - keyboard.getWidth()) / 2, (height - keyboard.getHeight()) / 2);
 
                 revalidate();
             }
         });
-	}
+    }
 }
