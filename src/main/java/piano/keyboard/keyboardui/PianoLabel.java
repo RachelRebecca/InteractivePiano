@@ -43,4 +43,9 @@ public class PianoLabel extends JLabel
 		setColorToOnClickColor();
 		key.play();
 	}
+
+	public Color getDefaultColor()
+	{
+		return this.defaultColor;
+	}
 }
