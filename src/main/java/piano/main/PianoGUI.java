@@ -9,7 +9,6 @@ import piano.recorder.RecorderPanel;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import javax.sound.midi.MidiChannel;
 import javax.swing.*;
 
@@ -19,14 +18,18 @@ public class PianoGUI extends JFrame {
 
     public PianoGUI(MidiChannel midiChannel, Recorder recorder) {
         setTitle("MY PIANO");
-        setSize(MainFrameInterface.KEYBOARD_WIDTH, MainFrameInterface.FRAME_HEIGHT);
+        setSize(MainFrameInterface.KEYBOARD_WIDTH
+                        + (KeyStats.NUM_WHITE_KEYS_IN_OCTAVE * KeyStats.OCTAVES)
+                , MainFrameInterface.FRAME_HEIGHT);
         setMinimumSize(new Dimension(740, 205));
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel root = new JPanel(new BorderLayout());
         root.setBackground(Color.BLACK);
 
         Keyboard keyboard = new Keyboard(midiChannel, recorder);
+
         root.add(new RecorderPanel(recorder), BorderLayout.NORTH);
         root.add(keyboard, BorderLayout.CENTER);
         root.add(new InstrumentsPanel(midiChannel), BorderLayout.SOUTH);
@@ -52,7 +55,7 @@ public class PianoGUI extends JFrame {
 
                     int octaveWidth = Math.min(frame.getWidth(), MAX_KEYBOARD_WIDTH) / KeyStats.OCTAVES;
 
-                    int whiteWidth = octaveWidth / KeyStats.NUM_WHITE_KEYS_IN_OCTAVE - KeyStats.SPACE_BETWEEN_WHITE_KEYS;
+                    int whiteWidth = octaveWidth / KeyStats.NUM_WHITE_KEYS_IN_OCTAVE;
                     int blackWidth = (int) (13.7 * whiteWidth / 23.5); // proportion: 13.7 and 23.5 are average size of white and black keys, respectively
 
                     int blackHeight = (int) (height / 1.75);
@@ -66,8 +69,9 @@ public class PianoGUI extends JFrame {
                     }
                 }
 
-               keyboard.setLocation((frame.getWidth() - keyboard.getWidth()) / 2, (height - keyboard.getHeight()) / 2);
+                keyboard.setLocation((frame.getWidth() - keyboard.getWidth()) / 2, (height - keyboard.getHeight()) / 2);
 
+                System.out.println(frame.getSize());
                 revalidate();
             }
         });

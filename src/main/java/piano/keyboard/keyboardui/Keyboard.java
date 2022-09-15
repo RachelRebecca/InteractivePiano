@@ -47,7 +47,7 @@ public class Keyboard extends JLayeredPane {
     }
 
     private void addBlackPianoLabels() {
-        int placement = KeyStats.FIRST_BLACK;
+        int placement = KeyStats.SPACE_BETWEEN_WHITE_KEYS + KeyStats.FIRST_BLACK;
         int index = 1;
         for (int octave = 0; octave < KeyStats.OCTAVES; octave++) {
             for (int blackKey = 0; blackKey < KeyStats.NUM_BLACK_KEYS_IN_OCTAVE; blackKey++) {
