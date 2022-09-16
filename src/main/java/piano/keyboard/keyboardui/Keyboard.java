@@ -4,21 +4,29 @@ import piano.keyboard.keyboardaudio.Key;
 import piano.keyboard.keyboardaudio.KeyListener;
 import piano.main.MainFrameInterface;
 import piano.recorder.Recorder;
+
 import javax.sound.midi.MidiChannel;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
-public class Keyboard extends JLayeredPane {
+public class Keyboard extends JLayeredPane
+{
     private Colors colors;
     private MidiChannel midiChannel;
     private Recorder recorder;
     private final int BACK_LAYER = 0;
     private final int FRONT_LAYER = 1;
 
-    public Keyboard(MidiChannel midiChannel, Recorder recorder) {
+    private int placement;
+
+    public Keyboard(MidiChannel midiChannel, Recorder recorder)
+    {
         this.midiChannel = midiChannel;
         this.recorder = recorder;
         colors = new Colors();
+        this.placement = 0;
 
         setSize(MainFrameInterface.KEYBOARD_WIDTH, MainFrameInterface.KEYBOARD_HEIGHT);
         setBackground(Color.BLACK);
@@ -27,36 +35,60 @@ public class Keyboard extends JLayeredPane {
         addBlackPianoLabels();
     }
 
-    private void addWhitePianoLabels() {
-        int placement = 0;
+    public void resize(JFrame frame)
+    {
+        System.out.println(getSize());
+
+        removeAll();
+
+        setPlacement((frame.getWidth() - MainFrameInterface.KEYBOARD_WIDTH) / 2);
+
+        addWhitePianoLabels();
+        addBlackPianoLabels();
+
+        revalidate();
+    }
+
+    private void addWhitePianoLabels()
+    {
+        int placement = this.placement;
 
         int index = 0;
-        for (int octave = 0; octave < KeyStats.OCTAVES; octave++) {
-            for (int whiteKey = 0; whiteKey < KeyStats.NUM_WHITE_KEYS_IN_OCTAVE; whiteKey++) {
+        for (int octave = 0; octave < KeyStats.OCTAVES; octave++)
+        {
+            for (int whiteKey = 0; whiteKey < KeyStats.NUM_WHITE_KEYS_IN_OCTAVE; whiteKey++)
+            {
                 addPianoLabel(Color.WHITE, index, placement);
 
                 placement += KeyStats.WHITE_WIDTH;
 
-                if (whiteKey == 2 || whiteKey == KeyStats.NUM_WHITE_KEYS_IN_OCTAVE - 1) {
+                if (whiteKey == 2 || whiteKey == KeyStats.NUM_WHITE_KEYS_IN_OCTAVE - 1)
+                {
                     index++;
-                } else {
+                } else
+                {
                     index += 2;
                 }
             }
         }
     }
 
-    private void addBlackPianoLabels() {
-        int placement = KeyStats.FIRST_BLACK;
+    private void addBlackPianoLabels()
+    {
+        int placement = this.placement + KeyStats.FIRST_BLACK;
         int index = 1;
-        for (int octave = 0; octave < KeyStats.OCTAVES; octave++) {
-            for (int blackKey = 0; blackKey < KeyStats.NUM_BLACK_KEYS_IN_OCTAVE; blackKey++) {
+        for (int octave = 0; octave < KeyStats.OCTAVES; octave++)
+        {
+            for (int blackKey = 0; blackKey < KeyStats.NUM_BLACK_KEYS_IN_OCTAVE; blackKey++)
+            {
                 addPianoLabel(Color.BLACK, index, placement);
 
-                if (blackKey == 1 || blackKey == KeyStats.NUM_BLACK_KEYS_IN_OCTAVE - 1) {
+                if (blackKey == 1 || blackKey == KeyStats.NUM_BLACK_KEYS_IN_OCTAVE - 1)
+                {
                     placement += KeyStats.BLACK_WIDTH + KeyStats.BIG_SPACE_BETWEEN_BLACK_KEYS;
-                    index +=3;
-                } else {
+                    index += 3;
+                } else
+                {
                     placement += KeyStats.BLACK_WIDTH + KeyStats.SPACE_BETWEEN_BLACK_KEYS;
                     index += 2;
                 }
@@ -79,5 +111,15 @@ public class Keyboard extends JLayeredPane {
         }
 
         add(pianoLabel);
+    }
+
+    public void setPlacement(int placement)
+    {
+        this.placement = placement;
+    }
+
+    public int getPlacement()
+    {
+        return this.placement;
     }
 }

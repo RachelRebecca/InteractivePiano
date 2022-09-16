@@ -1,9 +1,7 @@
 package piano.main;
 
 import piano.instruments.InstrumentsPanel;
-import piano.keyboard.keyboardui.KeyStats;
 import piano.keyboard.keyboardui.Keyboard;
-import piano.keyboard.keyboardui.PianoLabel;
 import piano.recorder.Recorder;
 import piano.recorder.RecorderPanel;
 
@@ -15,8 +13,6 @@ import javax.swing.*;
 
 public class PianoGUI extends JFrame
 {
-    public static int MAX_KEYBOARD_WIDTH = 860;
-
     public PianoGUI(MidiChannel midiChannel, Recorder recorder)
     {
         setTitle("MY PIANO");
@@ -27,58 +23,26 @@ public class PianoGUI extends JFrame
         JPanel root = new JPanel(new BorderLayout());
         root.setBackground(Color.BLACK);
 
-        JPanel keyboardPanel = new JPanel(new BorderLayout());
-        keyboardPanel.setBackground(Color.BLACK);
         Keyboard keyboard = new Keyboard(midiChannel, recorder);
-        keyboardPanel.add(keyboard, BorderLayout.CENTER);
-        keyboardPanel.setSize(new Dimension(MainFrameInterface.KEYBOARD_WIDTH, MainFrameInterface.KEYBOARD_HEIGHT));
-        keyboardPanel.setMaximumSize(new Dimension(MainFrameInterface.KEYBOARD_WIDTH, MainFrameInterface.KEYBOARD_HEIGHT));
 
         root.add(new RecorderPanel(recorder), BorderLayout.NORTH);
-        root.add(keyboardPanel, BorderLayout.CENTER);
+        root.add(keyboard, BorderLayout.CENTER);
         root.add(new InstrumentsPanel(midiChannel), BorderLayout.SOUTH);
         setContentPane(root);
 
-        //onResize2(keyboard);
+        onResize(keyboard);
     }
 
-    private void onResize2(Keyboard keyboard)
+    private void onResize(Keyboard keyboard)
     {
         addComponentListener(new ComponentAdapter()
         {
             public void componentResized(ComponentEvent evt)
             {
-                Component frame = (Component) evt.getSource();
-
-                int height = frame.getHeight() - MainFrameInterface.RECORDER_PANEL_HEIGHT
-                        - MainFrameInterface.INSTRUMENTS_PANEL_HEIGHT;
-
-                int width = frame.getWidth();
-
-                if (height/(width + 0.0) == MainFrameInterface.KEYBOARD_HEIGHT / (MainFrameInterface.KEYBOARD_WIDTH + 0.0))
+                if (getWidth() != (keyboard.getWidth() + (keyboard.getPlacement() * 2)))
                 {
-                    for (Component component : keyboard.getComponents())
-                    {
-                        PianoLabel key = (PianoLabel) component;
-
-                        int octaveWidth = frame.getWidth() / KeyStats.OCTAVES;
-
-                        int whiteWidth = octaveWidth / KeyStats.NUM_WHITE_KEYS_IN_OCTAVE;
-                        int blackWidth = (int) (13.7 * whiteWidth / 23.5); // proportion: 13.7 and 23.5 are average size of white and black keys, respectively
-
-                        int blackHeight = (int) (height / 1.75);
-
-                        if (key.getDefaultColor() == Color.WHITE)
-                        {
-                            key.setSize(new Dimension(whiteWidth, height));
-                        } else
-                        {
-                            key.setSize(new Dimension(blackWidth, blackHeight));
-                        }
-                    }
-
+                    keyboard.resize((JFrame) evt.getSource());
                 }
-                System.out.println(frame.getSize());
             }
         });
     }
