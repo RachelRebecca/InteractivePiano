@@ -28,14 +28,14 @@ public class Keyboard extends JLayeredPane {
     }
 
     private void addWhitePianoLabels() {
-        int placement = KeyStats.SPACE_BETWEEN_WHITE_KEYS;
+        int placement = 0;
 
         int index = 0;
         for (int octave = 0; octave < KeyStats.OCTAVES; octave++) {
             for (int whiteKey = 0; whiteKey < KeyStats.NUM_WHITE_KEYS_IN_OCTAVE; whiteKey++) {
                 addPianoLabel(Color.WHITE, index, placement);
 
-                placement += KeyStats.WHITE_WIDTH + KeyStats.SPACE_BETWEEN_WHITE_KEYS;
+                placement += KeyStats.WHITE_WIDTH;
 
                 if (whiteKey == 2 || whiteKey == KeyStats.NUM_WHITE_KEYS_IN_OCTAVE - 1) {
                     index++;
@@ -64,14 +64,17 @@ public class Keyboard extends JLayeredPane {
         }
     }
 
-    private void addPianoLabel(Color color, int index, int placement) {
+    private void addPianoLabel(Color color, int index, int placement)
+    {
         PianoLabel pianoLabel = new PianoLabel(color, colors.getColor(index), new Key(index, midiChannel));
         pianoLabel.setLocation(placement, 0);
         pianoLabel.addMouseListener(new KeyListener(recorder));
 
-        if (color == Color.WHITE) {
+        if (color == Color.WHITE)
+        {
             setLayer(pianoLabel, BACK_LAYER);
-        } else {
+        } else
+        {
             setLayer(pianoLabel, FRONT_LAYER);
         }
 
