@@ -20,7 +20,6 @@ public class Keyboard extends JLayeredPane {
         this.recorder = recorder;
         colors = new Colors();
 
-        setPreferredSize(new Dimension(MainFrameInterface.KEYBOARD_WIDTH, MainFrameInterface.KEYBOARD_HEIGHT));
         setSize(MainFrameInterface.KEYBOARD_WIDTH, MainFrameInterface.KEYBOARD_HEIGHT);
         setBackground(Color.BLACK);
 

@@ -19,11 +19,10 @@ public class PianoGUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel root = new JPanel(new GridBagLayout());
-        GridBagConstraints gcb = new GridBagConstraints();
-
         root.setBackground(Color.BLACK);
 
-        // initial constraints
+        // consistent constraints
+        GridBagConstraints gcb = new GridBagConstraints();
         gcb.fill = GridBagConstraints.HORIZONTAL;
         gcb.gridwidth = 5;
         gcb.weighty = 0.5;
@@ -46,6 +45,5 @@ public class PianoGUI extends JFrame {
 
         root.add(new InstrumentsPanel(midiChannel), gcb);
         setContentPane(root);
-
 	}
 }
