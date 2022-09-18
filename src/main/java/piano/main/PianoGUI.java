@@ -12,15 +12,37 @@ public class PianoGUI extends JFrame {
 
     public PianoGUI(MidiChannel midiChannel, Recorder recorder) {
         setTitle("MY PIANO");
-        setSize(MainFrameInterface.KEYBOARD_WIDTH, MainFrameInterface.FRAME_HEIGHT);
+        int width = MainFrameInterface.KEYBOARD_WIDTH;
+        int height = MainFrameInterface.FRAME_HEIGHT;
+        setSize(width, height);
+        setMinimumSize(new Dimension(width, height));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        JPanel root = new JPanel(new BorderLayout());
+        JPanel root = new JPanel(new GridBagLayout());
+        GridBagConstraints gcb = new GridBagConstraints();
+
         root.setBackground(Color.BLACK);
 
-        root.add(new RecorderPanel(recorder), BorderLayout.NORTH);
-        root.add(new Keyboard(midiChannel, recorder), BorderLayout.CENTER);
-        root.add(new InstrumentsPanel(midiChannel), BorderLayout.SOUTH);
+        gcb.gridx = 0;
+        gcb.gridy = 0;
+        gcb.gridwidth = 5;
+        gcb.gridheight = 1;
+
+        root.add(new RecorderPanel(recorder), gcb);
+
+        gcb.gridx = 0;
+        gcb.gridy = 1;
+        gcb.gridwidth = 5;
+        gcb.gridheight = 5;
+
+        root.add(new Keyboard(midiChannel, recorder), gcb);
+
+        gcb.gridx = 0;
+        gcb.gridy = 6;
+        gcb.gridwidth = 5;
+        gcb.gridheight = 1;
+
+        root.add(new InstrumentsPanel(midiChannel), gcb);
         setContentPane(root);
 
 	}
