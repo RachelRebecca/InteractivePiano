@@ -23,23 +23,25 @@ public class PianoGUI extends JFrame {
 
         root.setBackground(Color.BLACK);
 
-        gcb.gridx = 0;
-        gcb.gridy = 0;
+        // initial constraints
+        gcb.fill = GridBagConstraints.HORIZONTAL;
         gcb.gridwidth = 5;
+        gcb.weighty = 0.5;
+
+        // first row
+        gcb.gridy = 0;
         gcb.gridheight = 1;
 
         root.add(new RecorderPanel(recorder), gcb);
 
-        gcb.gridx = 0;
+        // second through sixth row
         gcb.gridy = 1;
-        gcb.gridwidth = 5;
         gcb.gridheight = 5;
 
         root.add(new Keyboard(midiChannel, recorder), gcb);
 
-        gcb.gridx = 0;
+        // seventh row
         gcb.gridy = 6;
-        gcb.gridwidth = 5;
         gcb.gridheight = 1;
 
         root.add(new InstrumentsPanel(midiChannel), gcb);
