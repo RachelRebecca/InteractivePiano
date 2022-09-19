@@ -12,7 +12,7 @@ public class PianoGUI extends JFrame {
 
     public PianoGUI(MidiChannel midiChannel, Recorder recorder) {
         setTitle("MY PIANO");
-        int width = MainFrameInterface.KEYBOARD_WIDTH;
+        int width = MainFrameInterface.KEYBOARD_WIDTH + 20;
         int height = MainFrameInterface.FRAME_HEIGHT;
         setSize(width, height);
         setMinimumSize(new Dimension(width, height));
