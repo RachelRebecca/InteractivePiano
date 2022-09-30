@@ -4,7 +4,8 @@ import piano.keyboard.keyboardaudio.Key;
 import piano.main.MainFrameInterface;
 
 import java.awt.Color;
-import javax.swing.JLabel;
+import javax.swing.*;
+import javax.swing.border.Border;
 
 public class PianoLabel extends JLabel
 {
@@ -16,6 +17,8 @@ public class PianoLabel extends JLabel
 		if (defaultColor == Color.WHITE || defaultColor == Color.BLACK) {
 			createPianoLabel(defaultColor, colorOnClick, key);
 		}
+
+		setBorder(BorderFactory.createLineBorder(Color.black));
 	}
 
 	private void createPianoLabel(Color defaultColor, Color onClickColor, Key key) {

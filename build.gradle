@@ -12,7 +12,7 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'weather.CurrentWeatherFrame'
+        attributes 'Main-Class': 'piano.main.Main'
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
@@ -44,3 +44,5 @@ jacocoTestReport {
         html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
 }
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15

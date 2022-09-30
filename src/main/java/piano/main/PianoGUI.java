@@ -1,6 +1,7 @@
 package piano.main;
 
 import piano.instruments.InstrumentsPanel;
+import piano.keyboard.keyboardaudio.KeyboardListener;
 import piano.keyboard.keyboardui.Keyboard;
 import piano.recorder.Recorder;
 import piano.recorder.RecorderPanel;
@@ -9,8 +10,11 @@ import javax.sound.midi.MidiChannel;
 import javax.swing.*;
 
 public class PianoGUI extends JFrame {
+    private Keyboard keyboard;
 
     public PianoGUI(MidiChannel midiChannel, Recorder recorder) {
+        keyboard = new Keyboard(midiChannel, recorder);
+
         setTitle("MY PIANO");
         int width = MainFrameInterface.KEYBOARD_WIDTH + 20;
         int height = MainFrameInterface.FRAME_HEIGHT;
@@ -44,6 +48,13 @@ public class PianoGUI extends JFrame {
         gcb.gridheight = 1;
 
         root.add(new InstrumentsPanel(midiChannel), gcb);
+
+        root.addKeyListener(new KeyboardListener(recorder, this));
+        root.setFocusable(true);
+
         setContentPane(root);
-	}
+    }
+    public Keyboard getKeyboard() {
+        return keyboard;
+    }
 }
