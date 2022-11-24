@@ -16,19 +16,43 @@ public class PianoGUI extends JFrame {
         keyboard = new Keyboard(midiChannel, recorder);
 
         setTitle("MY PIANO");
-        setSize(MainFrameInterface.KEYBOARD_WIDTH, MainFrameInterface.FRAME_HEIGHT);
+        int width = MainFrameInterface.KEYBOARD_WIDTH + 20;
+        int height = MainFrameInterface.FRAME_HEIGHT;
+        setSize(width, height);
+        setMinimumSize(new Dimension(width, height));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        JPanel root = new JPanel(new BorderLayout());
+        JPanel root = new JPanel(new GridBagLayout());
         root.setBackground(Color.BLACK);
 
-        root.add(new RecorderPanel(recorder), BorderLayout.NORTH);
-        root.add(keyboard, BorderLayout.CENTER);
-        root.add(new InstrumentsPanel(midiChannel), BorderLayout.SOUTH);
-        setContentPane(root);
+        // consistent constraints
+        GridBagConstraints gcb = new GridBagConstraints();
+        gcb.fill = GridBagConstraints.HORIZONTAL;
+        gcb.gridwidth = 5;
+        gcb.weighty = 0.5;
+
+        // first row
+        gcb.gridy = 0;
+        gcb.gridheight = 1;
+
+        root.add(new RecorderPanel(recorder), gcb);
+
+        // second through sixth row
+        gcb.gridy = 1;
+        gcb.gridheight = 5;
+
+        root.add(new Keyboard(midiChannel, recorder), gcb);
+
+        // seventh row
+        gcb.gridy = 6;
+        gcb.gridheight = 1;
+
+        root.add(new InstrumentsPanel(midiChannel), gcb);
 
         root.addKeyListener(new KeyboardListener(recorder, this));
         root.setFocusable(true);
+
+        setContentPane(root);
     }
     public Keyboard getKeyboard() {
         return keyboard;
